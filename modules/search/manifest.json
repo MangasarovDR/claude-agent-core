@@ -1,0 +1,19 @@
+{
+  "name": "search",
+  "version": "1.0",
+  "description": "Web search with provider cascade: Serper -> Tavily -> Brave",
+  "permissions": ["internet"],
+  "tools": [
+    {
+      "name": "web_search",
+      "description": "Поиск актуальной информации в интернете (вызывай не более одного раза за итерацию, не дублируй похожие запросы)",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {"type": "string", "description": "Поисковый запрос"}
+        },
+        "required": ["query"]
+      }
+    }
+  ]
+}

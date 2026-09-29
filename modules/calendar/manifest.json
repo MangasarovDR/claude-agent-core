@@ -1,0 +1,58 @@
+{
+  "name": "calendar",
+  "version": "1.0",
+  "description": "Google Calendar management",
+  "permissions": ["google_calendar"],
+  "tools": [
+    {
+      "name": "get_calendar_events",
+      "description": "Получить события из Google Calendar пользователя на указанное количество дней вперёд",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "days": {"type": "integer", "description": "Количество дней вперёд (по умолчанию 7)"}
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "create_calendar_event",
+      "description": "Создать новое событие в Google Calendar пользователя",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "title": {"type": "string", "description": "Название события"},
+          "start": {"type": "string", "description": "Время начала в формате ISO 8601, например 2026-06-30T15:00:00"},
+          "end": {"type": "string", "description": "Время окончания в формате ISO 8601"},
+          "description": {"type": "string", "description": "Описание события (опционально)"}
+        },
+        "required": ["title", "start"]
+      }
+    },
+    {
+      "name": "update_calendar_event",
+      "description": "Изменить существующее событие в Google Calendar — время, название, описание",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {"type": "string", "description": "Название или часть названия события для поиска"},
+          "new_title": {"type": "string", "description": "Новое название (опционально)"},
+          "new_start": {"type": "string", "description": "Новое время начала ISO 8601 (опционально)"},
+          "new_end": {"type": "string", "description": "Новое время окончания ISO 8601 (опционально)"}
+        },
+        "required": ["query"]
+      }
+    },
+    {
+      "name": "delete_calendar_event",
+      "description": "Удалить событие из Google Calendar",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {"type": "string", "description": "Название события для поиска и удаления"}
+        },
+        "required": ["query"]
+      }
+    }
+  ]
+}

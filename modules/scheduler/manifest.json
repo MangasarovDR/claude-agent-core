@@ -1,0 +1,52 @@
+{
+  "name": "scheduler",
+  "version": "1.0",
+  "description": "Задачи по расписанию — добавить, просмотреть, удалить",
+  "permissions": ["filesystem"],
+  "tools": [
+    {
+      "name": "schedule_add",
+      "description": "Добавить задачу по расписанию. Когда придёт время — задача выполнится как обычный запрос к боту (можно любой текст: напоминание, команда, запрос к инструментам).\n\nФорматы расписания (параметр schedule):\n• interval:30m — каждые 30 минут\n• interval:2h  — каждые 2 часа\n• interval:1d  — каждый день (через 24ч от сейчас)\n• daily:09:00  — каждый день в 09:00\n• weekly:1:09:00 — каждый понедельник в 09:00 (0=Пн, 1=Вт, ..., 6=Вс)\n• once:2026-07-01T09:00 — один раз в конкретный момент\n\nПример: schedule_add('Утренняя сводка', 'Напиши кратко план на день', 'daily:09:00')",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "Короткое название задачи (для отображения в списке)"
+          },
+          "task": {
+            "type": "string",
+            "description": "Что сделать — будет выполнено как запрос пользователя к боту"
+          },
+          "schedule": {
+            "type": "string",
+            "description": "Расписание в одном из форматов: interval:Nm/Nh/Nd, daily:HH:MM, weekly:D:HH:MM, once:YYYY-MM-DDTHH:MM"
+          }
+        },
+        "required": ["label", "task", "schedule"]
+      }
+    },
+    {
+      "name": "schedule_list",
+      "description": "Показать все активные задачи по расписанию с их ID, временем следующего запуска и описанием.",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "schedule_remove",
+      "description": "Удалить задачу по расписанию по её ID (или первым символам ID из schedule_list).",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "description": "ID задачи из schedule_list (можно первые 8 символов)"
+          }
+        },
+        "required": ["job_id"]
+      }
+    }
+  ]
+}

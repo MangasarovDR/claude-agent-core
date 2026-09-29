@@ -1,0 +1,12 @@
+# Секреты — никогда не коммитятся
+.env
+keys.json
+google_credentials.json
+kwork_session.json
+kwork_seen.json
+*.bak*
+
+# Рантайм
+__pycache__/
+*.pyc
+*.log

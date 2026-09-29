@@ -1,0 +1,20 @@
+{
+  "name": "bash",
+  "version": "1.0",
+  "description": "Execute shell commands on the server autonomously",
+  "permissions": ["shell"],
+  "tools": [
+    {
+      "name": "execute_bash",
+      "description": "Выполнить shell-команду на сервере автономно",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "command": {"type": "string", "description": "Shell-команда для выполнения"},
+          "reason": {"type": "string", "description": "Зачем нужна эта команда"}
+        },
+        "required": ["command", "reason"]
+      }
+    }
+  ]
+}

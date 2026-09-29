@@ -1,0 +1,6 @@
+python-telegram-bot==22.8
+anthropic==0.112.0
+google-api-python-client==2.198.0
+google-auth==2.55.1
+google-auth-httplib2==0.4.0
+playwright==1.49.0

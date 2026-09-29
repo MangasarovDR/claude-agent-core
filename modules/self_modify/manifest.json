@@ -1,0 +1,34 @@
+{
+  "name": "self_modify",
+  "version": "1.0",
+  "description": "Self-modification sandbox: propose, validate, and apply new modules",
+  "permissions": ["shell", "filesystem"],
+  "tools": [
+    {
+      "name": "propose_module",
+      "description": "Предложить новый модуль или обновить существующий. Код проверяется автоматически (синтаксис, структура) и отправляется пользователю на подтверждение перед применением. После /sandbox_apply модуль активируется без перезапуска бота.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "module_name": {
+            "type": "string",
+            "description": "Имя модуля — только строчные буквы, цифры, подчёркивание. Например: weather, reminders, notes"
+          },
+          "manifest": {
+            "type": "string",
+            "description": "Содержимое manifest.json — валидный JSON с полями name, version, description, permissions, tools"
+          },
+          "handler": {
+            "type": "string",
+            "description": "Содержимое handler.py — должен содержать async def handle_tool(name: str, inputs: dict, **kwargs) -> str"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Зачем нужен этот модуль, какую задачу решает"
+          }
+        },
+        "required": ["module_name", "manifest", "handler", "reason"]
+      }
+    }
+  ]
+}

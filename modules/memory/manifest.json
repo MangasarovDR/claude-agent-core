@@ -1,0 +1,63 @@
+{
+  "name": "memory",
+  "version": "2.0",
+  "description": "Чертоги Разума — долгосрочная память через Memory API (SQLite + семантический поиск)",
+  "permissions": ["network"],
+  "tools": [
+    {
+      "name": "memory_save",
+      "description": "Сохранить факт, правило или знание в долгосрочную память (Чертоги Разума). Переживает перезапуск. Используй проактивно — если узнал что-то важное о Давиде, его проектах или предпочтениях, сохрани сразу.\n\nТипы:\n• user — факты о Давиде: предпочтения, здоровье, семья, карьера\n• feedback — правила работы с Claude: язык, стиль, поведение\n• project — активные проекты: статус, решения, блокеры\n• knowledge — базы знаний: 1С, n8n, налоги, технологии\n• idea — бизнес-идеи и концепции Давида\n• reference — технические ссылки: URL, пути, конфиги\n\nimportance 1–5: 5=всегда в контексте (правила), 4=важно (профиль, активные проекты), 3=обычное, 2=идеи, 1=архив.\n\nПеред сохранением вызови memory_search — если запись уже есть, используй тот же slug для обновления.\n\n⚠️ ОСТОРОЖНО С ОБНОВЛЕНИЕМ: сохранение по существующему slug ПЕРЕЗАПИСЫВАЕТ body_md целиком, а не дописывает. Если поиск показал «совпавший фрагмент» или пометку «обрезано» — значит ты видишь лишь ЧАСТЬ записи, и отправка её как body_md уничтожит остальное. В таком случае либо заводи новый slug, либо сначала запроси запись целиком. Для копившихся списков (ссылки, образцы) используй corpus_add, а не memory_save.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "description": "Уникальный идентификатор: kebab-case, начинается с типа. Примеры: 'user-predpochteniya-obshcheniya', 'project-automatiko-status', 'idea-saas-servic-centrov', 'knowledge-nds-ip-2026'. Если обновляешь — используй тот же slug."
+          },
+          "type": {
+            "type": "string",
+            "enum": ["user", "feedback", "project", "knowledge", "idea", "reference"],
+            "description": "Тип записи"
+          },
+          "description": {
+            "type": "string",
+            "description": "Одна строка: о чём эта запись (используется в поиске и индексе)"
+          },
+          "body_md": {
+            "type": "string",
+            "description": "Полный текст в Markdown. Включай контекст, детали, даты."
+          },
+          "importance": {
+            "type": "integer",
+            "description": "Важность 1–5 (5=всегда в контексте). Умолчание: feedback→5, user/project→4, knowledge/reference→3, idea→2",
+            "default": 3
+          },
+          "tags": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Необязательные теги для фильтрации"
+          }
+        },
+        "required": ["slug", "type", "description", "body_md"]
+      }
+    },
+    {
+      "name": "memory_search",
+      "description": "Семантический + полнотекстовый поиск по Чертогам Разума. Возвращает топ-N релевантных записей. Вызывай перед memory_save чтобы не создавать дубликаты.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Поисковый запрос — слова, фраза или описание темы"
+          },
+          "type": {
+            "type": "string",
+            "description": "Необязательный фильтр по типу: user/feedback/project/knowledge/idea/reference"
+          }
+        },
+        "required": ["query"]
+      }
+    }
+  ]
+}
